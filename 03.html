@@ -1,162 +1,218 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Telegram Mini Apps Vanilla JS Sample App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Ads and Earn Rewards!</title>
+   <script src='//niphaumeenses.net/vignette.min.js' data-zone='8551132' data-sdk='show_8551132'></script>
+
     <style>
         body {
-            --bg-color: var(--tg-theme-bg-color);
-            font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--tg-theme-text-color);
-            margin: 48px 24px;
-            padding: 0;
-            color-scheme: var(--tg-color-scheme);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa;
         }
 
-        a {
-            color: var(--tg-theme-link-color);
-        }
-        #viewport {
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: 0;
-            height: var(--tg-viewport-stable-height, 100vh);
-            pointer-events: none;
-            transition: all .2s ease;
-        }
-        #viewport:after {
-            content: '';
-            display: block;
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            border-width: 4px;
-            border-style: solid;
-            border-image: linear-gradient(45deg, rgba(64, 224, 208, .5), rgba(173, 255, 47, .5)) 1;
+        .app-container {
+            text-align: center;
+            background: linear-gradient(145deg, #ffffff, #d6e6f2);
+            padding: 40px;
+            border-radius: 20px;
+            width: 320px;
+            box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
         }
 
-        #viewport-params-size,
-        #viewport-params-expand {
-            content: attr(text);
-            position: absolute;
+        .app-container:hover {
+            transform: translateY(-10px);
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .token-section {
+            margin-bottom: 20px;
+            background-color: #e7f0f5;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .referral-section {
+            margin-bottom: 20px;
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .developer-label {
             display: inline-block;
-            background: var(--tg-theme-link-color, rgb(64, 224, 208));
-            right: 4px;
-            left: auto;
-            font-size: 8px;
-            padding: 4px;
-            vertical-align: top;
+            padding: 10px 25px;
+            font-size: 15px;
+            color: #444;
+            background-color: #e7f0f5;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            /* Remove underline */
         }
-        #viewport-params-size {
-            top: 4px;
+
+        .developer-label:hover {
+            color: #007bff;
+            /* Change color on hover */
         }
-        #viewport-params-expand {
-            top: 30px;
+
+        .ad-button,
+        .withdraw-button,
+        .referral-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            color: #fff;
+            margin-top: 15px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .blue-button {
+            background-color: #007bff;
+        }
+
+        .green-button {
+            background-color: #28a745;
+        }
+
+        .yellow-button {
+            background-color: #ffc107;
+        }
+
+        .withdraw-button {
+            background-color: #ff5722;
+        }
+
+        .referral-button {
+            background-color: #6a1b9a;
+        }
+
+        .ad-button:hover,
+        .withdraw-button:hover,
+        .referral-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .ad-button:active,
+        .withdraw-button:active,
+        .referral-button:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
 
 <body>
-    <main>
-        <div align="center">
-            <a href="https://ton.org/"><img width="48" src="https://github.com/telegram-mini-apps-dev/vanilla-js-boilerplate/blob/master/assets/tapps.png" alt="logo of telegram web apps"></a>
+
+    <div class="app-container">
+        <h2>Watch Ads and Earn Rewards!</h2>
+        <div class="token-section" id="tokenCount">Tokens: 0</div>
+        1 Tokens Sama Dengan 1 Rupiah <p>
+        <div class="referral-section">
+            <p>Your Referral Link:</p>
+            <input type="text" id="UPDATE" readonly>
+            <button class="referral-button" onclick="copyReferralLink()">Copy Link</button>
         </div>
-        <h1>Modals</h1>
-        <button onclick="Telegram.WebApp.showAlert('Hello World!');">Launch Alert</button>
-        <button onclick="showPopup();">Launch Popup</button>
+        <a class="developer-label" href="https://t.me/rajakomen" target="_blank">Showads_bot Community</a>
+        <button class="ad-button blue-button" onclick="showRewardedAd()">Show Ad 1</button>
+        <button class="ad-button green-button" onclick="showRewardedAd()">Show Ad 2</button>
+        <button class="ad-button yellow-button" onclick="showRewardedAd()">Show Ad 3</button>
+        <button class="withdraw-button" onclick="withdrawTokens()">Tarik Saldo</button>
+        Wajib Rekam Layar Sebelum Klik Tarik Saldo & klik OK, Tidak ada bukti Rekam Layar Hangus.
+    </div>
 
-        <h1>Links</h1>
-        <ul>
-            <li>
-                <a href="javascript:Telegram.WebApp.openTelegramLink('https://t.me/trendingapps');">Open link within Telegram</a>
-            </li>
-            <li>
-                <a href="javascript:Telegram.WebApp.openLink('https://ton.org/');">Open link in external browser</a>
-            </li>
-            <li>
-                <a href="javascript:Telegram.WebApp.openLink('https://telegra.ph/api',{try_instant_view:true});">Open link inside Telegram webview</a>
-            </li>
-        </ul>
 
-        <h1>Buttons</h1>
-        <button onclick="Telegram.WebApp.expand();">Expand Webview</button>
-        <button onclick="toggleMainButton();">Toggle Main Button</button>
-    </main>
-    <div id="viewport"></div>
-    <div id="viewport-params-size"></div>
-    <div id="viewport-params-expand"></div>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // Init TWA
-        Telegram.WebApp.ready();
+        // Load tokens from local storage
+        let tokens = localStorage.getItem('tokens') ? parseInt(localStorage.getItem('tokens')) : 0;
+        document.getElementById('tokenCount').innerText = `Tokens: ${tokens}`;
 
-        // Event occurs whenever theme settings are changed in the user's Telegram app (including switching to night mode).
-        Telegram.WebApp.onEvent('themeChanged', function() {
-            document.documentElement.className = Telegram.WebApp.colorScheme;
-        });
+        // Generate a referral code for the user
+        const referralCode = localStorage.getItem('referralCode') || Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem('referralCode', referralCode);
 
-        // Show main button
-        Telegram.WebApp.MainButton.setParams({
-            text: 'Main Button'
-        });
-        Telegram.WebApp.MainButton.onClick(function () {
-            Telegram.WebApp.showAlert('Main Button was clicked')
-        });	
-        Telegram.WebApp.MainButton.show();
+        // Create referral link
+        const referralLink = `${window.location.origin}${window.location.pathname}?ref=${referralCode}`;
+        document.getElementById('referralLink').value = referralLink;
 
-        // Function to call showPopup API
-        function showPopup() {
-            Telegram.WebApp.showPopup({
-                title: 'Title',
-                message: 'Some message',
-                buttons: [
-                    {id: 'link', type: 'default', text: 'Open ton.org'},
-                    {type: 'cancel'},
-                ]
-            }, function(btn) {
-                if (btn === 'link') {
-                    Telegram.WebApp.openLink('https://ton.org/');
-                }
-            });
-        };
-
-        // Function to toggle main TWA button
-        function toggleMainButton() {
-            if (Telegram.WebApp.MainButton.isVisible) {
-                Telegram.WebApp.MainButton.hide();
+        function showRewardedAd() {
+            if (typeof show_8551132 === 'function') {
+                show_8551132().then(() => {
+                 alert('Ad shown successfully!');
+                    tokens += 5;
+                    localStorage.setItem('tokens', tokens);
+                    document.getElementById('tokenCount').innerText = `Tokens: ${tokens}`;
+                }).catch(error => {
+                    console.error('Ad failed to load or display:', error);
+                });
             } else {
-                Telegram.WebApp.MainButton.show();
+                console.error('Ad script is not loaded or available.');
+                setTimeout(showRewardedAd, 1000); // Retry after 1 second
             }
-        };
-
-        function setViewportData() {
-            var sizeEl = document.getElementById('viewport-params-size');
-            sizeEl.innerText = 'width: ' + window.innerWidth + ' x ' + 
-                'height: ' + Telegram.WebApp.viewportStableHeight;
-
-            var expandEl = document.querySelector('#viewport-params-expand');
-            expandEl.innerText = 'Is Expanded: ' + (Telegram.WebApp.isExpanded ? 'true' : 'false');
         }
 
-        Telegram.WebApp.setHeaderColor('secondary_bg_color');
+        function withdrawTokens() {
+            if (tokens >= 1000) {
+                alert(`You have withdrawn ${tokens} tokens.`);
+                tokens = 0;
+                localStorage.setItem('tokens', tokens);
+                document.getElementById('tokenCount').innerText = `Tokens: ${tokens}`;
+                window.location.href = "https://t.me/haqipay";
+            } else {
+                alert('Anda memerlukan minimal Rp 1.000 token untuk melakukan penarikan.');
+            }
+        }
 
-        setViewportData();
-        Telegram.WebApp.onEvent('viewportChanged', setViewportData);
+        function copyReferralLink() {
+            const referralLinkInput = document.getElementById('referralLink');
+            referralLinkInput.select();
+            document.execCommand('copy');
+            alert('Referral link copied to clipboard!');
+        }
 
-        Telegram.WebApp.onEvent('themeChanged', function() {
-            document.body.setAttribute('style', '--bg-color:' + Telegram.WebApp.backgroundColor);
-        });
-
+        // Check for referral code in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+        if (refCode && refCode !== referralCode) {
+            // Reward for using a referral link
+            tokens += 100; // 100 tokens for the referred user
+            localStorage.setItem('tokens', tokens);
+            document.getElementById('tokenCount').innerText = `Tokens: ${tokens}`;
+            alert('Referral link used successfully! You earned 100 tokens.');
+            
+            // Reward the referrer
+            let referrerTokens = localStorage.getItem(`tokens_${refCode}`) ? parseInt(localStorage.getItem(`tokens_${refCode}`)) : 0;
+            referrerTokens += 100; // 100 tokens for the referrer
+            localStorage.setItem(`tokens_${refCode}`, referrerTokens);
+        }
     </script>
-
-    <!-- Eruda is console for mobile browsers -->
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
 </body>
+
 </html>
